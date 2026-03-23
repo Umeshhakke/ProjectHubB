@@ -56,7 +56,7 @@ const checkout = async () => {
       alert("Order creation failed");
       return;
     }
-    console.log("KEY:", import.meta.env.VITE_RAZORPAY_KEY);
+    console.log("KEY:", import.meta.env);
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY,
       amount: data.amount,
