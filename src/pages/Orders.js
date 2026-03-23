@@ -5,7 +5,7 @@ import Header from '../components/Header';
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
-  // const userId = getUserId();
+  const userId = getUserId();
 
   useEffect(() => {
   const fetchOrders = async () => {
@@ -26,9 +26,6 @@ export default function Orders() {
     fetchOrders();
   }
 }, [userId]);
-
-    if (userId) fetchOrders();
-  }, [userId]);
 
   if (!orders.length) {
     return (
