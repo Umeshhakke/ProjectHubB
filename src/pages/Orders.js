@@ -8,14 +8,23 @@ export default function Orders() {
   const userId = getUserId();
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const res = await API.get(`/orders/${userId}`);
-        setOrders(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  const fetchOrders = async () => {
+    try {
+      const res = await API.get('/orders/my-orders', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      setOrders(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.log("Orders fetch error:", err);
+      setOrders([]);
+    }
+  };
+
+  fetchOrders();
+}, []);
 
     if (userId) fetchOrders();
   }, [userId]);
