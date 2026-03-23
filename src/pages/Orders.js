@@ -5,26 +5,27 @@ import Header from '../components/Header';
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
-  const userId = getUserId();
+  // const userId = getUserId();
 
   useEffect(() => {
   const fetchOrders = async () => {
     try {
-      const res = await API.get('/orders/my-orders', {
+      const res = await API.get(`/orders/${userId}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+          Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       });
 
-      setOrders(Array.isArray(res.data) ? res.data : []);
+      setOrders(res.data || []);
     } catch (err) {
-      console.log("Orders fetch error:", err);
-      setOrders([]);
+      console.log("Order fetch error:", err);
     }
   };
 
-  fetchOrders();
-}, []);
+  if (userId) {
+    fetchOrders();
+  }
+}, [userId]);
 
     if (userId) fetchOrders();
   }, [userId]);
