@@ -87,6 +87,7 @@ const checkout = async () => {
 
     const rzp = new window.Razorpay(options);
     rzp.open();
+    console.log(import.meta.env.VITE_RAZORPAY_KEY);
 
   } catch (err) {
     console.log("FULL ERROR:", err);
