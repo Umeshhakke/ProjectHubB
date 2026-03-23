@@ -39,23 +39,52 @@ export default function Cart() {
   };
 
   // ✅ CHECKOUT (RAZORPAY)
-  const checkout = async () => {
+const checkout = async () => {
   if (!cart.length) return alert('Cart is empty!');
 
   try {
-    // 1️⃣ Call backend to create order
     const { data } = await API.post('/orders/create-order', {}, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     });
 
-    console.log("Razorpay Hosted Link:", data.hostedLink);
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY,
+      amount: data.amount,
+      currency: data.currency,
+      name: "ProjectHub",
+      description: "Purchase Projects",
+      order_id: data.order_id,
 
-    // 2️⃣ Redirect user to Razorpay hosted page
-    window.location.href = data.hostedLink;
+      handler: async function (response) {
+        try {
+          await API.post('/orders/verify-payment', response, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          });
+
+          alert("Payment Successful!");
+
+          setCart([]);
+          fetchCart();
+
+          window.location.href = "/orders";
+
+        } catch (err) {
+          console.log(err);
+          alert("Verification failed");
+        }
+      },
+
+      theme: {
+        color: "#3399cc"
+      }
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
 
   } catch (err) {
     console.log(err);
-    alert("Payment failed");
+    alert(err.response?.data?.message || "Payment failed");
   }
 };
   // ✅ Empty cart UI
