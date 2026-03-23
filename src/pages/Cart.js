@@ -1,0 +1,108 @@
+import React, { useState, useEffect } from 'react';
+import API from '../api/axios';
+import { getUserId } from '../utils/auth';
+import { useCart } from '../context/CartContext';
+
+export default function Cart() {
+  const [cart, setCart] = useState([]);
+  const { fetchCart } = useCart();
+  const userId = getUserId();
+
+  // ✅ Fetch cart
+  useEffect(() => {
+  const loadCart = async () => {
+    if (!userId) return;
+
+    try {
+      const res = await API.get(`/cart/${userId}`);
+      setCart(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.log(err);
+      setCart([]);
+    }
+  };
+
+  loadCart();
+}, [userId]);
+
+  // ✅ Remove item
+  const removeFromCart = async (cartId) => {
+    try {
+      await API.delete(`/cart/${cartId}`);
+
+      setCart(cart.filter((item) => item.cart_id !== cartId));
+
+      fetchCart(); // update header
+    } catch (err) {
+      alert('Failed to remove item');
+    }
+  };
+
+  // ✅ CHECKOUT (RAZORPAY)
+  const checkout = async () => {
+  if (!cart.length) return alert('Cart is empty!');
+
+  try {
+    // 1️⃣ Call backend to create order
+    const { data } = await API.post('/orders/create-order', {}, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    });
+
+    console.log("Razorpay Hosted Link:", data.hostedLink);
+
+    // 2️⃣ Redirect user to Razorpay hosted page
+    window.location.href = data.hostedLink;
+
+  } catch (err) {
+    console.log(err);
+    alert("Payment failed");
+  }
+};
+  // ✅ Empty cart UI
+  if (!cart.length) {
+    return (
+      <p className="text-center mt-20 text-gray-500">
+        Your cart is empty.
+      </p>
+    );
+  }
+
+  return (
+    <div className="min-h-screen p-6 bg-gray-50">
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        Your Cart
+      </h1>
+
+      <div className="max-w-3xl mx-auto space-y-4">
+
+        {cart.map((c) => (
+          <div
+            key={c.cart_id}
+            className="flex justify-between items-center bg-white p-4 rounded-lg shadow"
+          >
+            <div>
+              <h2 className="font-bold text-lg">{c.name}</h2>
+              <p className="text-gray-600">₹{c.price}</p>
+            </div>
+
+            <button
+              onClick={() => removeFromCart(c.cart_id)}
+              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+
+        {/* 🔥 Checkout Button */}
+        <button
+          onClick={checkout}
+          className="w-full py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition"
+        >
+          Checkout
+        </button>
+
+      </div>
+    </div>
+  );
+}
