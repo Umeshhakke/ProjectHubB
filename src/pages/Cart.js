@@ -42,10 +42,20 @@ export default function Cart() {
 const checkout = async () => {
   if (!cart.length) return alert('Cart is empty!');
 
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  if (total <= 0) return alert("Invalid amount");
+
   try {
     const { data } = await API.post('/orders/create-order', {}, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     });
+
+    console.log("ORDER DATA:", data);
+
+    if (!data.order_id) {
+      alert("Order creation failed");
+      return;
+    }
 
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY,
@@ -62,10 +72,8 @@ const checkout = async () => {
           });
 
           alert("Payment Successful!");
-
           setCart([]);
           fetchCart();
-
           window.location.href = "/orders";
 
         } catch (err) {
@@ -74,17 +82,15 @@ const checkout = async () => {
         }
       },
 
-      theme: {
-        color: "#3399cc"
-      }
+      theme: { color: "#3399cc" }
     };
 
     const rzp = new window.Razorpay(options);
     rzp.open();
 
   } catch (err) {
-    console.log(err);
-    alert(err.response?.data?.message || "Payment failed");
+    console.log("FULL ERROR:", err);
+    alert(err?.response?.data?.message || "Payment failed");
   }
 };
   // ✅ Empty cart UI
