@@ -20,6 +20,7 @@ export default function Signup() {
     setError('');
     try {
       const res = await API.post('/auth/signup', form);
+      console.log(res.data);
       alert('Signup successful! Please login.');
       navigate('/login');
     } catch (err) {
