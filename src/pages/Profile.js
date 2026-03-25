@@ -16,7 +16,11 @@ export default function Profile() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await API.get(`/auth/me/${userId}`);
+        const res = await API.get('/auth/me', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
         setUser(res.data);
         setName(res.data.name);
         setEmail(res.data.email);
@@ -31,7 +35,14 @@ export default function Profile() {
   // Update profile
   const updateProfile = async () => {
     try {
-      await API.put(`/auth/update/${userId}`, { name, email });
+      await API.put('/auth/update', 
+      { name, email },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      }
+    );
       alert('Profile updated successfully!');
       setEditMode(false);
 

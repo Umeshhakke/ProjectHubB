@@ -2,18 +2,37 @@ import { jwtDecode } from 'jwt-decode';
 
 export const getToken = () => localStorage.getItem('token');
 
-export const getUserId = () => {
+// ✅ Get full decoded user
+export const getUser = () => {
   const token = getToken();
   if (!token) return null;
+
   try {
-    return jwtDecode(token).id;
+    return jwtDecode(token); // contains id + role
   } catch {
     return null;
   }
 };
 
-export const isLoggedIn = () => !!getUserId();
+// ✅ Get user ID
+export const getUserId = () => {
+  const user = getUser();
+  return user?.id || null;
+};
 
+// ✅ Get role (IMPORTANT for admin)
+export const getUserRole = () => {
+  const user = getUser();
+  return user?.role || null;
+};
+
+// ✅ Check login
+export const isLoggedIn = () => !!getToken();
+
+// ✅ Check admin
+export const isAdmin = () => getUserRole() === 'admin';
+
+// ✅ Logout
 export const logout = () => {
-  localStorage.removeItem('token');
+  localStorage.clear(); 
 };

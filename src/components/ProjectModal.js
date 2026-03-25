@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function ProjectModal({ project, onClose, onAddToCart }) {
-  const BASE_URL = "https://projectsuploads.onrender.com";
+  const BASE_URL = "http://localhost:5000";
 
   if (!project) return null;
 

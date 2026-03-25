@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import API from '../api/axios'; // make sure you created this file
+import API from '../api/axios';
+import localImage from '../images/img.png';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -19,8 +20,7 @@ export default function Signup() {
     e.preventDefault();
     setError('');
     try {
-      const res = await API.post('/auth/signup', form);
-      console.log(res.data);
+      await API.post('/auth/signup', form);
       alert('Signup successful! Please login.');
       navigate('/login');
     } catch (err) {
@@ -29,57 +29,79 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold mb-6 text-center">Signup</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-black text-green-400 font-mono px-4 overflow-hidden">
+
+      {/* Hacker Icon */}
+      <div className="absolute top-10 left-10 text-6xl animate-pulse">
+        <img src={localImage} alt="Secure" width={400} height={400} />
+      </div>
+
+      <div className="w-full max-w-md bg-gray-900/80 backdrop-blur-md rounded-xl shadow-2xl p-8 border border-green-500">
+        <h2 className="text-3xl font-bold mb-6 text-center tracking-wider text-green-300">
+          PROJECT GUID SIGNUP
+        </h2>
+
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block mb-1 font-semibold">Name</label>
+            <label className="block mb-1 font-semibold text-green-300">Name</label>
             <input
               type="text"
               name="name"
               value={form.name}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-black text-green-300 border border-green-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-green-500"
+              placeholder="Your Name"
             />
           </div>
+
           <div>
-            <label className="block mb-1 font-semibold">Email</label>
+            <label className="block mb-1 font-semibold text-green-300">Email</label>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-black text-green-300 border border-green-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-green-500"
+              placeholder="you@domain.com"
             />
           </div>
+
           <div>
-            <label className="block mb-1 font-semibold">Password</label>
+            <label className="block mb-1 font-semibold text-green-300">Password</label>
             <input
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-black text-green-300 border border-green-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-green-500"
+              placeholder="Enter your password"
             />
           </div>
+
           <button
             type="submit"
-            className="w-full py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
+            className="w-full py-2 bg-green-500 text-black font-bold rounded-lg hover:bg-green-400 transition shadow-lg"
           >
-            Signup
+            Create Identity
           </button>
         </form>
-        <p className="mt-4 text-center text-sm">
+
+        <p className="mt-6 text-center text-sm text-green-300">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">
-            Login
+          <Link to="/login" className="text-green-400 hover:underline">
+            Access System
           </Link>
         </p>
+
+        {/* Fake terminal animation */}
+        <div className="mt-6 text-sm text-green-500 text-center animate-pulse">
+          &gt; creating new identity...
+        </div>
       </div>
     </div>
   );
