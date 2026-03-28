@@ -25,7 +25,7 @@ export default function Projects() {
     const fetchProjects = async () => {
       try {
         const res = await API.get('/projects');
-        setProjects(res.data);
+        setAllProjects(res.data);
         setAllProjects(res.data);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch projects');
