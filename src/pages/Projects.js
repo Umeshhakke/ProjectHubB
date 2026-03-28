@@ -6,7 +6,7 @@ import { useCart } from '../context/CartContext';
 import ProjectModal from '../components/ProjectModal';
 
 export default function Projects() {
-  const [projects, setProjects] = useState([]);
+  // const [projects, setProjects] = useState([]);
   const [allProjects, setAllProjects] = useState([]);
   const [error, setError] = useState('');
   const { fetchCart } = useCart();

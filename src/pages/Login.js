@@ -45,7 +45,7 @@ export default function Login() {
       
       {/* Hacker Icon */}
       <div className="absolute top-10 left-10 text-6xl animate-pulse">
-          <img src={localImage} alt="A description of the image" width={400} height={400} />
+          <img src={localImage} alt="hacker logo" width={400} height={400} />
       </div>
 
       <div className="w-full max-w-md bg-gray-900/80 backdrop-blur-md rounded-xl shadow-2xl p-8 border border-green-500">

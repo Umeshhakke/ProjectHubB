@@ -29,7 +29,7 @@ export default function Landing() {
       <div className="flex flex-col items-center justify-center min-h-screen text-center px-6 relative z-10">
 
         <div className="text-6xl mb-6 animate-pulse">
-          <img src={localImage} alt="A description of the image" width={400} height={400} />
+          <img src={localImage} alt="Login illustration" width={400} height={400} />
         </div>
 
         <h1 className="text-5xl md:text-7xl font-extrabold mb-4 tracking-widest text-green-300">
