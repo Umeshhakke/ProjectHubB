@@ -141,7 +141,7 @@ export default function Cart() {
 
               <div className="flex-1 ml-0 sm:ml-4 mt-3 sm:mt-0">
                 <h2 className="font-bold text-lg">{item.name}</h2>
-                <p className="text-gray-600 text-sm line-clamp-3">{item.description}</p>
+                <p className="text-gray-600 text-sm line-clamp-3 whitespace-pre-line">{item.description}</p>
                 <p className="font-semibold text-blue-600 mt-1">₹{item.price}</p>
               </div>
 

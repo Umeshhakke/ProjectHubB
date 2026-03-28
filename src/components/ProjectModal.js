@@ -6,49 +6,54 @@ export default function ProjectModal({ project, onClose, onAddToCart }) {
   if (!project) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start overflow-y-auto z-50 p-4">
       
-      <div className="bg-white rounded-xl shadow-lg max-w-lg w-full p-6 relative">
+      <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col relative">
 
         {/* CLOSE BUTTON */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl"
+          className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl z-10"
         >
           ✖
         </button>
 
-        {/* IMAGE */}
-        {project.image_url && (
-          <img
-            src={
-              project.image_url
-                ? `${BASE_URL}${project.image_url.startsWith('/') ? '' : '/'}${project.image_url}`
-                : 'https://via.placeholder.com/300'
-            }
-            alt={project.name}
-            className="w-full h-40 object-cover"
-          />
-        )}
+        {/* SCROLLABLE CONTENT */}
+        <div className="overflow-y-auto flex-1">
 
-        {/* DETAILS */}
-        <h2 className="text-2xl font-bold mb-2">{project.name}</h2>
+          {/* IMAGE */}
+          {project.image_url && (
+            <img
+              src={`${BASE_URL}${project.image_url.startsWith('/') ? '' : '/'}${project.image_url}`}
+              alt={project.name}
+              className="w-full h-48 object-cover rounded-t-2xl"
+            />
+          )}
 
-        <p className="text-gray-600 mb-4">
-          {project.description || 'No description available'}
-        </p>
+          <div className="p-6">
+            {/* DETAILS */}
+            <h2 className="text-2xl font-bold mb-2">{project.name}</h2>
 
-        <p className="text-lg font-semibold mb-4">
-          Price: ₹{project.price}
-        </p>
+            <p className="text-gray-600 mb-4 leading-relaxed whitespace-pre-line">
+              {project.description || 'No description available'}
+            </p>
 
-        {/* ACTION */}
-        <button
-          onClick={() => onAddToCart(project)}
-          className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Add to Cart
-        </button>
+            <p className="text-lg font-semibold text-blue-600">
+              ₹{project.price}
+            </p>
+          </div>
+        </div>
+
+        {/* FIXED BUTTON */}
+        <div className="p-4 border-t bg-white">
+          <button
+            onClick={() => onAddToCart(project)}
+            className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            Add to Cart
+          </button>
+        </div>
+
       </div>
     </div>
   );

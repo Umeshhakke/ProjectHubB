@@ -134,12 +134,12 @@ export default function Admin() {
             </thead>
             <tbody>
               {users.map((u) => (
-                <tr key={u.id} className="border-t text-center">
+                <tr key={u._id} className="border-t text-center">
                   <td>{u.name}</td>
                   <td>{u.email}</td>
                   <td>{u.role}</td>
                   <td>
-                    <button onClick={() => deleteUser(u.id)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                    <button onClick={() => deleteUser(u._id)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
                       Delete
                     </button>
                   </td>
@@ -243,7 +243,7 @@ export default function Admin() {
             </thead>
             <tbody>
               {projects.map((p) => (
-                <tr key={p.id} className="border-t text-center">
+                <tr key={p._id} className="border-t text-center">
                   <td>
                     <img
                       src={
@@ -258,7 +258,7 @@ export default function Admin() {
                   <td>{p.name}</td>
                   <td>₹{p.price}</td>
                   <td>
-                    <button onClick={() => deleteProject(p.id)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                    <button onClick={() => deleteProject(p._id)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
                       Delete
                     </button>
                   </td>
@@ -281,13 +281,13 @@ export default function Admin() {
             </thead>
             <tbody>
               {orders.map((o) => (
-                <tr key={o.id} className="border-t text-center">
+                <tr key={o._id} className="border-t text-center">
                   <td>{o.user_name}</td>
                   <td>{o.project_name}</td>
                   <td>
                     <select
                       value={o.status}
-                      onChange={(e) => updateOrder(o.id, e.target.value)}
+                      onChange={(e) => updateOrder(o._id, e.target.value)}
                       className="border px-2 py-1 rounded"
                     >
                       <option value="pending">Pending</option>
