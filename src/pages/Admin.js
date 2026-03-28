@@ -6,7 +6,7 @@ export default function Admin() {
   const [users, setUsers] = useState([]);
   const [projects, setProjects] = useState([]);
   const [orders, setOrders] = useState([]);
-  const BASE_URL = "http://localhost:5000";
+  const BASE_URL = "https://projecthub-397q.onrender.com";
 
   // Add project form state
   const [showForm, setShowForm] = useState(false);

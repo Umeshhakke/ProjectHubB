@@ -19,7 +19,7 @@ export default function Projects() {
   const [levelFilter, setLevelFilter] = useState([]);
   const [techFilter, setTechFilter] = useState([]);
 
-  const BASE_URL = "http://localhost:5000";
+  const BASE_URL = "https://projecthub-397q.onrender.com";
 
   useEffect(() => {
     const fetchProjects = async () => {
