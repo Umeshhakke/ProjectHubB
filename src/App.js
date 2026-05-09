@@ -10,7 +10,12 @@ import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import Profile from './pages/Profile';
 import Orders from './pages/Orders';
-import Admin from './pages/Admin';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminProjects from './pages/admin/AdminProjects';
+import AdminRequests from './pages/admin/AdminRequests';
+import AdminOrders from './pages/admin/AdminOrders';
 
 function App() {
   return (
@@ -58,7 +63,13 @@ function App() {
         } />
 
         <Route path="/orders" element={<Orders />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="projects" element={<AdminProjects />} />
+          <Route path="requests" element={<AdminRequests />} />
+          <Route path="orders" element={<AdminOrders />} />
+        </Route>
       </Routes>
     </Router>
   );

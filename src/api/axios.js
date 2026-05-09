@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://projecthub-397q.onrender.com/api',
+  baseURL: 'http://localhost:5000/api',
 });
 
 // ✅ Add token only once
