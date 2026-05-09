@@ -11,6 +11,7 @@ export default function Projects() {
   const { fetchCart } = useCart();
   const [selectedProject, setSelectedProject] = useState(null);
   const [showRequestModal, setShowRequestModal] = useState(false);
+  const [showMobileFilters, setShowMobileFilters] = useState(false); // mobile filter toggle
 
   const [search, setSearch] = useState('');
   const [sortOrder, setSortOrder] = useState('');
@@ -19,14 +20,14 @@ export default function Projects() {
   const [levelFilter, setLevelFilter] = useState([]);
   const [techFilter, setTechFilter] = useState([]);
 
-  // Request form fields – now includes deadline
+  // Request form fields
   const [requestForm, setRequestForm] = useState({
     title: '',
     description: '',
     techStack: '',
     budget: '',
     level: 'Beginner',
-    deadline: '',          // <-- new field
+    deadline: '',
     additionalNotes: ''
   });
   const [requestSubmitting, setRequestSubmitting] = useState(false);
@@ -132,14 +133,13 @@ export default function Projects() {
     }
 
     try {
-      // TODO: Replace with your actual API endpoint
       await API.post('/project-requests', {
         title: requestForm.title.trim(),
         description: requestForm.description.trim(),
         techStack: requestForm.techStack.trim(),
         budget: requestForm.budget.trim() || 'Not specified',
         level: requestForm.level,
-        deadline: requestForm.deadline.trim() || 'Not specified',   // <-- send deadline
+        deadline: requestForm.deadline.trim() || 'Not specified',
         additionalNotes: requestForm.additionalNotes.trim()
       });
 
@@ -169,6 +169,45 @@ export default function Projects() {
     );
   }
 
+  // Shared sidebar content
+  const FilterSidebar = () => (
+    <div className="bg-white rounded-2xl shadow-lg p-5 h-fit">
+      <h2 className="text-xl font-bold mb-4 border-b pb-2">Filters</h2>
+
+      {/* Price */}
+      <div className="mb-6">
+        <p className="font-semibold mb-2">Price</p>
+        <label><input type="radio" name="price" onChange={() => setPriceFilter('low')} /> Under ₹500</label><br />
+        <label><input type="radio" name="price" onChange={() => setPriceFilter('high')} /> Above ₹500</label><br />
+        <label><input type="radio" name="price" onChange={() => setPriceFilter('')} /> All</label>
+      </div>
+
+      {/* Level */}
+      <div className="mb-6">
+        <p className="font-semibold mb-2">Level</p>
+        {['Beginner', 'Moderate', 'Advanced'].map(level => (
+          <label key={level}>
+            <input type="checkbox" onChange={(e) => handleLevel(level, e.target.checked)} /> {level}
+          </label>
+        ))}
+      </div>
+
+      {/* Tech */}
+      <div className="mb-6">
+        <p className="font-semibold mb-2">Tech</p>
+        {['React', 'Node', 'AI', 'ML', 'Python', 'C', 'C++', 'Java', 'Arduino'].map(tech => (
+          <label key={tech}>
+            <input type="checkbox" onChange={(e) => handleTech(tech, e.target.checked)} /> {tech}
+          </label>
+        ))}
+      </div>
+
+      <button onClick={resetAllFilters} className="w-full py-2 bg-red-500 text-white rounded-lg">
+        Clear Filters
+      </button>
+    </div>
+  );
+
   return (
     <>
       <ProjectHeader
@@ -179,42 +218,46 @@ export default function Projects() {
       />
 
       <div className="min-h-screen bg-gray-100 p-4 flex gap-6">
-        {/* SIDEBAR */}
-        <div className="w-72 bg-white rounded-2xl shadow-lg p-5 hidden md:block h-fit sticky top-20">
-          <h2 className="text-xl font-bold mb-4 border-b pb-2">Filters</h2>
+        {/* DESKTOP SIDEBAR */}
+        <div className="w-72 hidden md:block sticky top-20 h-fit">
+          <FilterSidebar />
+        </div>
 
-          {/* Price */}
-          <div className="mb-6">
-            <p className="font-semibold mb-2">Price</p>
-            <label><input type="radio" name="price" onChange={() => setPriceFilter('low')} /> Under ₹500</label><br />
-            <label><input type="radio" name="price" onChange={() => setPriceFilter('high')} /> Above ₹500</label><br />
-            <label><input type="radio" name="price" onChange={() => setPriceFilter('')} /> All</label>
-          </div>
-
-          {/* Level */}
-          <div className="mb-6">
-            <p className="font-semibold mb-2">Level</p>
-            {['Beginner', 'Moderate', 'Advanced'].map(level => (
-              <label key={level}>
-                <input type="checkbox" onChange={(e) => handleLevel(level, e.target.checked)} /> {level}
-              </label>
-            ))}
-          </div>
-
-          {/* Tech */}
-          <div className="mb-6">
-            <p className="font-semibold mb-2">Tech</p>
-            {['React', 'Node', 'AI', 'ML', 'Python', 'C', 'C++', 'Java', 'Arduino'].map(tech => (
-              <label key={tech}>
-                <input type="checkbox" onChange={(e) => handleTech(tech, e.target.checked)} /> {tech}
-              </label>
-            ))}
-          </div>
-
-          <button onClick={resetAllFilters} className="w-full py-2 bg-red-500 text-white rounded-lg">
-            Clear Filters
+        {/* MOBILE FILTER BUTTON & SIDEBAR OVERLAY */}
+        <div className="md:hidden fixed bottom-6 right-6 z-40">
+          <button
+            onClick={() => setShowMobileFilters(true)}
+            className="bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 12.414V18a1 1 0 01-.553.894l-4 2A1 1 0 019 20v-7.586L3.293 6.707A1 1 0 013 6V4z" />
+            </svg>
           </button>
         </div>
+
+        {/* MOBILE FILTER OVERLAY */}
+        {showMobileFilters && (
+          <div className="fixed inset-0 z-50 flex justify-end">
+            {/* backdrop */}
+            <div
+              className="absolute inset-0 bg-black bg-opacity-50"
+              onClick={() => setShowMobileFilters(false)}
+            />
+            {/* sidebar drawer */}
+            <div className="relative w-72 bg-white h-full overflow-y-auto p-5 shadow-xl z-10">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold">Filters</h2>
+                <button
+                  onClick={() => setShowMobileFilters(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  ✕
+                </button>
+              </div>
+              <FilterSidebar />
+            </div>
+          </div>
+        )}
 
         {/* MAIN CONTENT */}
         <div className="flex-1">
@@ -272,119 +315,120 @@ export default function Projects() {
 
       {/* REQUEST PROJECT MODAL */}
       {showRequestModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6 relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setShowRequestModal(false)}
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 z-10"
             >
               ✕
             </button>
-            <h2 className="text-2xl font-bold mb-4">Request a New Project</h2>
-            <p className="text-gray-600 mb-4">Tell us what you need and when you need it by.</p>
+            <div className="p-6">
+              <h2 className="text-2xl font-bold mb-4">Request a New Project</h2>
+              <p className="text-gray-600 mb-4">Tell us what you need and when you need it by.</p>
 
-            <form onSubmit={submitProjectRequest} className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold mb-1">Project Title *</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={requestForm.title}
-                  onChange={handleRequestInputChange}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., Smart Home Automation"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Description *</label>
-                <textarea
-                  name="description"
-                  value={requestForm.description}
-                  onChange={handleRequestInputChange}
-                  rows="3"
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Describe your project, key features, and purpose..."
-                  required
-                ></textarea>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Tech Stack (comma separated)</label>
-                <input
-                  type="text"
-                  name="techStack"
-                  value={requestForm.techStack}
-                  onChange={handleRequestInputChange}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., React, Node, Python"
-                />
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <label className="block text-sm font-semibold mb-1">Budget (₹)</label>
+              <form onSubmit={submitProjectRequest} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Project Title *</label>
                   <input
                     type="text"
-                    name="budget"
-                    value={requestForm.budget}
+                    name="title"
+                    value={requestForm.title}
                     onChange={handleRequestInputChange}
                     className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="e.g., 500"
+                    placeholder="e.g., Smart Home Automation"
+                    required
                   />
                 </div>
-                <div className="flex-1">
-                  <label className="block text-sm font-semibold mb-1">Difficulty Level</label>
-                  <select
-                    name="level"
-                    value={requestForm.level}
+
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Description *</label>
+                  <textarea
+                    name="description"
+                    value={requestForm.description}
+                    onChange={handleRequestInputChange}
+                    rows="3"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Describe your project, key features, and purpose..."
+                    required
+                  ></textarea>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Tech Stack (comma separated)</label>
+                  <input
+                    type="text"
+                    name="techStack"
+                    value={requestForm.techStack}
                     onChange={handleRequestInputChange}
                     className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option>Beginner</option>
-                    <option>Moderate</option>
-                    <option>Advanced</option>
-                  </select>
+                    placeholder="e.g., React, Node, Python"
+                  />
                 </div>
-              </div>
 
-              {/* NEW: Project Deadline */}
-              <div>
-                <label className="block text-sm font-semibold mb-1">Project Deadline (optional)</label>
-                <input
-                  type="date"
-                  name="deadline"
-                  value={requestForm.deadline}
-                  onChange={handleRequestInputChange}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <label className="block text-sm font-semibold mb-1">Budget (₹)</label>
+                    <input
+                      type="text"
+                      name="budget"
+                      value={requestForm.budget}
+                      onChange={handleRequestInputChange}
+                      className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="e.g., 500"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="block text-sm font-semibold mb-1">Difficulty Level</label>
+                    <select
+                      name="level"
+                      value={requestForm.level}
+                      onChange={handleRequestInputChange}
+                      className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option>Beginner</option>
+                      <option>Moderate</option>
+                      <option>Advanced</option>
+                    </select>
+                  </div>
+                </div>
 
-              <div>
-                <label className="block text-sm font-semibold mb-1">Additional Notes</label>
-                <textarea
-                  name="additionalNotes"
-                  value={requestForm.additionalNotes}
-                  onChange={handleRequestInputChange}
-                  rows="2"
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Any other requirements..."
-                ></textarea>
-              </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Project Deadline (optional)</label>
+                  <input
+                    type="date"
+                    name="deadline"
+                    value={requestForm.deadline}
+                    onChange={handleRequestInputChange}
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
 
-              {requestError && <p className="text-red-500 text-sm">{requestError}</p>}
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Additional Notes</label>
+                  <textarea
+                    name="additionalNotes"
+                    value={requestForm.additionalNotes}
+                    onChange={handleRequestInputChange}
+                    rows="2"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Any other requirements..."
+                  ></textarea>
+                </div>
 
-              <button
-                type="submit"
-                disabled={requestSubmitting}
-                className={`w-full py-3 rounded-lg text-white font-semibold transition ${
-                  requestSubmitting ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-                }`}
-              >
-                {requestSubmitting ? 'Submitting...' : 'Submit Request'}
-              </button>
-            </form>
+                {requestError && <p className="text-red-500 text-sm">{requestError}</p>}
+
+                <button
+                  type="submit"
+                  disabled={requestSubmitting}
+                  className={`w-full py-3 rounded-lg text-white font-semibold transition ${
+                    requestSubmitting ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
+                >
+                  {requestSubmitting ? 'Submitting...' : 'Submit Request'}
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       )}
