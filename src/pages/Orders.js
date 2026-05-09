@@ -55,7 +55,7 @@ export default function Orders() {
             >
               {/* IMAGE */}
               <img
-                src={`http://localhost:5000${order.image_url}`}
+                src={`https://projecthub-397q.onrender.com${order.image_url}`}
                 alt={order.name}
                 className="w-full h-40 object-cover"
               />
@@ -81,7 +81,7 @@ export default function Orders() {
                 {/* DOWNLOAD BUTTON */}
                 {order.file_url ? (
                   <a
-                    href={order.file_url.startsWith('http') ? order.file_url : `http://localhost:5000${order.file_url}`}
+                    href={order.file_url.startsWith('http') ? order.file_url : `https://projecthub-397q.onrender.com${order.file_url}`}
                     download
                     className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-center"
                   >

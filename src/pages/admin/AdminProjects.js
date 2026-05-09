@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import API from '../../api/axios';
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://projecthub-397q.onrender.com';
 
 export default function AdminProjects() {
   const [projects, setProjects] = useState([]);

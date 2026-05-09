@@ -32,7 +32,7 @@ export default function Projects() {
   const [requestSubmitting, setRequestSubmitting] = useState(false);
   const [requestError, setRequestError] = useState('');
 
-  const BASE_URL = "http://localhost:5000";
+  const BASE_URL = "https://projecthub-397q.onrender.com";
 
   useEffect(() => {
     const fetchProjects = async () => {

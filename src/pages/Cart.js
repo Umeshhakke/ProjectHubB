@@ -135,7 +135,7 @@ export default function Cart() {
               className="flex flex-col sm:flex-row items-center bg-white p-4 rounded-lg shadow hover:shadow-lg transition"
             >
               <img
-                src={`http://localhost:5000${item.image_url}` || 'https://via.placeholder.com/150'}
+                src={`https://projecthub-397q.onrender.com${item.image_url}` || 'https://via.placeholder.com/150'}
                 alt={item.name}
                 className="w-32 h-32 object-cover rounded-lg" />
 
