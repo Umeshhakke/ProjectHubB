@@ -34,7 +34,22 @@ export default function AdminRequests() {
     }
   };
 
-  const openDetailModal = (req) => setSelectedRequest(req);
+  const openDetailModal = async (req) => {
+  if (!req.read) {
+    try {
+      const res = await API.put(`/project-requests/admin/${req._id}/mark-read`);
+      setRequests(prev =>
+        prev.map(r => (r._id === req._id ? { ...r, read: true } : r))
+      );
+      setSelectedRequest(res.data);
+      return;
+    } catch (err) {
+      console.error(err);
+      // fallback: still open modal even if mark-read fails
+    }
+  }
+  setSelectedRequest(req);
+};
   const closeDetailModal = () => setSelectedRequest(null);
 
   return (

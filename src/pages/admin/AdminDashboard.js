@@ -11,7 +11,21 @@ export default function AdminDashboard() {
     API.get('/admin/projects').then(res => setProjects(res.data)).catch(console.error);
     API.get('/admin/orders').then(res => setOrders(res.data)).catch(console.error);
   }, []);
-
+  useEffect(() => {
+    const updateBadge = async () => {
+      try {
+        const { data } = await API.get('/admin/unread-count');
+        if (navigator.setAppBadge) {
+          await navigator.setAppBadge(data.unreadRequests);
+        }
+      } catch (err) {
+        console.error('Badge error', err);
+      }
+    };
+    updateBadge();
+    const interval = setInterval(updateBadge, 10000); // every 10 sec
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
