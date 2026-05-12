@@ -366,8 +366,8 @@ export default function Projects() {
                   />
                 </div>
 
-                <div className="flex gap-4">
-                  <div className="flex-1">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1 min-w-0">
                     <label className="block text-sm font-semibold mb-1">Budget (₹)</label>
                     <input
                       type="text"
@@ -378,7 +378,7 @@ export default function Projects() {
                       placeholder="e.g., 500"
                     />
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <label className="block text-sm font-semibold mb-1">Difficulty Level</label>
                     <select
                       name="level"
