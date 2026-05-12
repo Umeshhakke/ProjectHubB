@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../api/axios';
-import localImage from '../images/img.png';
+// import localImage from '../images/img.png';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -32,9 +32,9 @@ export default function Signup() {
     <div className="min-h-screen flex items-center justify-center bg-black text-green-400 font-mono px-4 overflow-hidden">
 
       {/* Hacker Icon */}
-      <div className="absolute top-10 left-10 text-6xl animate-pulse">
+      {/* <div className="absolute top-10 left-10 text-6xl animate-pulse">
         <img src={localImage} alt="Secure" width={400} height={400} />
-      </div>
+      </div> */}
 
       <div className="w-full max-w-md bg-gray-900/80 backdrop-blur-md rounded-xl shadow-2xl p-8 border border-green-500">
         <h2 className="text-3xl font-bold mb-6 text-center tracking-wider text-green-300">
