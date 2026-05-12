@@ -32,7 +32,7 @@ export default function ProjectHeader({
 
   const closeMobile = () => setMobileOpen(false);
 
-  const isActive = (path) => location.pathname === path;
+  // const isActive = (path) => location.pathname === path;
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md border-b">
